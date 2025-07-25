@@ -22,6 +22,7 @@ class WAObserver
         } elseif ($pelanggaran->statuspesan === 'Belum'&& $pelanggaran->kategori === 'berat') {
             $this->kirimPesanWhatsApp($pelanggaran);
         }
+    
     }
 
 

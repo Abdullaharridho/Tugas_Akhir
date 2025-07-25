@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/storage/logo1.png">
     <title>Login</title>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -79,15 +80,9 @@
                 </div>
 
                 <!-- Remember Me -->
-                <div class="flex items-center">
-                    <input id="remember_me" name="remember" type="checkbox"
-                        class="text-indigo-600 rounded focus:ring-indigo-500">
-                    <label for="remember_me" class="ml-2 text-sm text-gray-600">Ingat saya</label>
-                </div>
 
                 <!-- Tombol Login -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:underline">Lupa Password?</a>
                     <button type="submit"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition duration-300 transform hover:scale-105">
                         Masuk
