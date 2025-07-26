@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('keterangan');
             $table->date('tanggal_kembali')->nullable();
-            $table->enum('statuspesan', ['Kembali', 'izin','terlambat'])->default('izin');
+            $table->enum('statuspesan', ['kembali', 'izin','terlambat'])->default('izin');
             $table->timestamps();
         });
     }

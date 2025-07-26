@@ -2,6 +2,9 @@
 @extends('sideadmin')
 
 @section('konten')
+@php
+    $canEdit = Auth::user()->email === 'abdullaharridho03@gmail.com';
+@endphp
 
 <div class="container mx-auto p-6"
     x-data="{
@@ -11,10 +14,12 @@
 
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-semibold text-gray-800 dark:text-white">👨‍🏫 Daftar Guru</h1>
-        <button @click="openCreate = true"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded-full shadow transition">
-            + Tambah Guru
-        </button>
+        @if ($canEdit)
+    <button @click="openCreate = true"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded-full shadow transition">
+        + Tambah Guru
+    </button>
+@endif
     </div>
 
     {{-- Tabel --}}
@@ -42,10 +47,13 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
+
+                            @if ($canEdit)
                             <button @click="openEdit = '{{ $guru->id }}'"
                                 class="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-1.5 px-4 rounded-full transition">
                                 ✏️ Edit
                             </button>
+                            @endif
                             <form action="{{ route('guru.destroy', $guru->id) }}" method="POST"
                                 onsubmit="return confirm('Yakin hapus?')">
                                 @csrf @method('DELETE')

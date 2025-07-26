@@ -17,16 +17,18 @@ class UserAdminController extends Controller
 
     public function create()
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+    return back()
+        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Menambah Pengurus.')
+        ->withInput();
+         }
         return view('admin.useradmin.create');
     }
 
     public function store(Request $request)
     {
-        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
-    return back()
-        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Menambah Pengurus.')
-        ->withInput();
-}
+       
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -53,17 +55,19 @@ class UserAdminController extends Controller
 
     public function edit($id)
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+    return back()
+        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Mengedit Akun')
+        ->withInput();
+         }
         $admin = User::findOrFail($id);
         return view('admin.useradmin.edit', compact('admin'));
     }
 
+
     public function update(Request $request, $id)
     {
-        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
-    return back()
-        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Mengedit Akun')
-        ->withInput();
-}
+   
         $admin = User::findOrFail($id);
 
         $request->validate([

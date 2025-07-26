@@ -9,6 +9,7 @@ use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DataSantriController extends Controller
@@ -39,6 +40,11 @@ class DataSantriController extends Controller
 
     public function tambah()
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $kamar = Kamar::all();
         $kelas = Kelas::all();
 
@@ -92,6 +98,11 @@ class DataSantriController extends Controller
 
     public function edit($nis)
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $santri = Datasantri::findOrFail($nis);
         $kelas = Kelas::all();
         $kamar = Kamar::all();
@@ -131,6 +142,11 @@ class DataSantriController extends Controller
 
     public function hapus($nis)
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $santri = Datasantri::findOrFail($nis);
         $santri->delete();
 
@@ -138,6 +154,11 @@ class DataSantriController extends Controller
     }
     public function import(Request $request)
     {
+         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $import = new SantriImport();
         Excel::import($import, $request->file('file'));
         session()->flash('successCount', $import->successCount);

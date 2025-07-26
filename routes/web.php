@@ -144,11 +144,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/perizinan/{id}/edit', [PerizinanController::class, 'edit'])->name('perizinan.edit');
     Route::put('/perizinan/update/{id}', [PerizinanController::class, 'update'])->name('perizinan.update');
     Route::delete('/perizinan/{id}', [PerizinanController::class, 'hapus'])->name('perizinan.hapus');
-    Route::post('/perizinan/kembali/{id}', [PerizinanController::class, 'kembali'])->name('perizinan.kembali');
-    Route::put('/perizinan/kembali/{id}', [PerizinanController::class, 'tandaiKembali'])->name('perizinan.kembali');
+    Route::post('/perizinan/kembali/{id}', [PerizinanController::class, 'tandaiKembali'])->name('perizinan.kembali');
     Route::get('/perizinan/riwayat/{nis}', [PerizinanController::class, 'riwayat'])->name('perizinan.riwayat');
     Route::get('/perizinan/surat/ajax/{id}', [PerizinanController::class, 'getSurat'])->name('perizinan.getSurat');
-    Route::get('/perizinan/surat-terlambat/{id}', [PerizinanController::class, 'suratTerlambat'])->name('perizinan.surat_terlambat');
+    Route::get('/perizinan/surat-terlambat/{id}', [PerizinanController::class, 'cetakSuratTerlambat'])->name('perizinan.surat_terlambat');
 
 
 

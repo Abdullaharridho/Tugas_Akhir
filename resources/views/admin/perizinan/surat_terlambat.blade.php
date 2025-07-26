@@ -41,10 +41,10 @@
     <div class="isi">
         <p>Kepada Yth.</p>
         <p>Orang tua/wali dari:</p>
-        <p><strong>Nama:</strong> {{ $izin->santri->nama }}<br>
-            <strong>NIS:</strong> {{ $izin->santri->nis }}</p>
+        <p><strong>Nama:</strong> {{ $perizinan->santri->nama }}<br>
+            <strong>NIS:</strong> {{ $perizinan->santri->nis }}</p>
 
-        <p>Dengan ini kami memberitahukan bahwa santri tersebut kembali ke pondok pada tanggal <strong>{{ \Carbon\Carbon::parse($izin->updated_at)->format('d F Y') }}</strong>, yang seharusnya kembali pada <strong>{{ \Carbon\Carbon::parse($izin->tanggal_kembali)->format('d F Y') }}</strong>.</p>
+        <p>Dengan ini kami memberitahukan bahwa santri tersebut kembali ke pondok pada tanggal <strong>{{ \Carbon\Carbon::parse($perizinan->updated_at)->format('d F Y') }}</strong>, yang seharusnya kembali pada <strong>{{ \Carbon\Carbon::parse($perizinan->tanggal_kembali)->format('d F Y') }}</strong>.</p>
 
         <p>Oleh karena itu, santri dikenakan <strong>hukuman 1 sak semen</strong> sebagai bentuk tanggung jawab atas keterlambatannya.</p>
 
@@ -54,7 +54,7 @@
     <div class="ttd">
         <p>Hormat kami,</p>
         <p style="margin-top: 60px;">__________________________<br>
-            Pengurus Pondok</p>
+            {{ $perizinan->pengurus->name ?? '-' }}</p>
     </div>
 
     <script>

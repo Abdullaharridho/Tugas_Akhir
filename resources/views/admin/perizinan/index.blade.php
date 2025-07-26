@@ -23,26 +23,26 @@
                 value="{{ request('search') }}"
                 class="w-full pl-10 pr-10 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300">
         </div>
-            <script>
-        const searchInput = document.getElementById('searchInput');
-        const searchForm = document.getElementById('searchForm');
-        const spinner = document.getElementById('loadingSpinner');
+        <script>
+            const searchInput = document.getElementById('searchInput');
+            const searchForm = document.getElementById('searchForm');
+            const spinner = document.getElementById('loadingSpinner');
 
-        let typingTimer;
-        const delay = 1000;
+            let typingTimer;
+            const delay = 1000;
 
-        searchInput.addEventListener('input', function () {
-            clearTimeout(typingTimer);
-            spinner.classList.remove('hidden');
-            typingTimer = setTimeout(() => {
-                searchForm.submit();
-            }, delay);
-        });
+            searchInput.addEventListener('input', function() {
+                clearTimeout(typingTimer);
+                spinner.classList.remove('hidden');
+                typingTimer = setTimeout(() => {
+                    searchForm.submit();
+                }, delay);
+            });
 
-        window.addEventListener('pageshow', () => {
-            spinner.classList.add('hidden');
-        });
-    </script>
+            window.addEventListener('pageshow', () => {
+                spinner.classList.add('hidden');
+            });
+        </script>
     </form>
 
     <div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -63,7 +63,7 @@
             <tbody class="animate-fade-in">
                 @foreach ($santri as $index => $s)
                 @php
-                    $izin = $perizinan[$s->nis] ?? null;
+                $izin = $perizinan[$s->nis] ?? null;
                 @endphp
 
                 <tr class="transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -72,49 +72,53 @@
                     <td class="border px-4 py-2">{{ $s->nama }}</td>
 
                     @if (!$izin)
-                        <td colspan="4" class="border px-4 py-2 text-center italic text-gray-400 dark:text-gray-500">Belum ada data perizinan</td>
-                        <td class="border px-4 py-2">-</td>
-                        <td class="border px-4 py-2">
-                            <a href="{{ route('perizinan.tambah', ['nis' => $s->nis]) }}" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 transition duration-300">
-                                <i class="fa-solid fa-plus-circle"></i> Tambah
-                            </a>
-                        </td>
+                    <td colspan="4" class="border px-4 py-2 text-center italic text-gray-400 dark:text-gray-500">Belum ada data perizinan</td>
+                    <td class="border px-4 py-2">-</td>
+                    <td class="border px-4 py-2">
+                        <a href="{{ route('perizinan.tambah', ['nis' => $s->nis]) }}" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 transition duration-300">
+                            <i class="fa-solid fa-plus-circle"></i> Tambah
+                        </a>
+                    </td>
                     @else
-                        <td class="border px-4 py-2">{{ $izin->tanggal }}</td>
-                        <td class="border px-4 py-2">
-                            @if($izin->statuspesan === 'Kembali')
-                                <span class="text-green-600 font-semibold"><i class="fa-solid fa-check-circle"></i> Kembali</span>
-                            @else
-                                <span class="text-yellow-600 font-semibold"><i class="fa-solid fa-hourglass-half"></i> Masih Izin</span>
-                            @endif
-                        </td>
-                        <td class="border px-4 py-2">{{ $izin->keterangan }}</td>
-                        <td class="border px-4 py-2">{{ $izin->tanggal_kembali ?? '-' }}</td>
-                        <td class="border px-4 py-2 whitespace-nowrap">{{ $izin->pengurus->name ?? '-' }}</td>
-                        <td class="border px-4 py-2 space-y-1">
-                            <a href="{{ route('perizinan.tambah', ['nis' => $s->nis]) }}" class="text-blue-600 hover:underline flex items-center gap-1">
-                                <i class="fa-solid fa-plus-circle"></i> Tambah
-                            </a>
-                            <a href="{{ route('perizinan.riwayat', ['nis' => $s->nis]) }}" class="text-indigo-600 hover:underline flex items-center gap-1">
-                                <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
-                            </a>
-                            @if ($izin->statuspesan === 'terlambat')
-                                <a href="{{ route('perizinan.surat_terlambat', $izin->id) }}" target="_blank" class="text-red-600 hover:underline flex items-center gap-1">
-                                    <i class="fa-solid fa-file-pdf"></i> Surat Keterlambatan
-                                </a>
-                            @endif
-                            @if ($izin->statuspesan !== 'Kembali')
-                                <form action="{{ route('perizinan.kembali', $izin->id) }}" method="POST" onsubmit="return confirm('Apakah santri sudah kembali?')">
-                                    @csrf
-                                    <button type="submit" class="text-green-600 hover:underline flex items-center gap-1">
-                                        <i class="fa-solid fa-arrow-left"></i> Kembali
-                                    </button>
-                                </form>
-                                <a href="{{ route('perizinan.getSurat', $izin->id) }}" class="text-green-600 hover:text-green-800 hover:underline flex items-center gap-1">
-                                    <i class="fa-solid fa-file-lines"></i> Surat
-                                </a>
-                            @endif
-                        </td>
+                    <td class="border px-4 py-2">{{ $izin->tanggal }}</td>
+                    <td class="border px-4 py-2">
+                        @if($izin->statuspesan === 'kembali')
+                        <span class="text-green-600 font-semibold">
+                            <i class="fa-solid fa-check-circle"></i> Kembali
+                        </span>
+                        @elseif($izin->statuspesan === 'terlambat')
+                        <span class="text-red-600 font-semibold">
+                            <i class="fa-solid fa-clock"></i> Terlambat
+                        </span>
+                        @else
+                        <span class="text-yellow-600 font-semibold">
+                            <i class="fa-solid fa-hourglass-half"></i> Masih Izin
+                        </span>
+                        @endif
+                    </td>
+                    <td class="border px-4 py-2">{{ $izin->keterangan }}</td>
+                    <td class="border px-4 py-2">{{ $izin->tanggal_kembali ?? '-' }}</td>
+                    <td class="border px-4 py-2 whitespace-nowrap">{{ $izin->pengurus->name ?? '-' }}</td>
+                    <td class="border px-4 py-2 space-y-1">
+                        <a href="{{ route('perizinan.tambah', ['nis' => $s->nis]) }}" class="text-blue-600 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-plus-circle"></i> Tambah
+                        </a>
+                        <a href="{{ route('perizinan.riwayat', ['nis' => $s->nis]) }}" class="text-indigo-600 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
+                        </a>
+
+                        @if ($izin->statuspesan !== 'kembali')
+                        <form action="{{ route('perizinan.kembali', $izin->id) }}" method="POST" onsubmit="return confirm('Apakah santri sudah kembali?')">
+                            @csrf
+                            <button type="submit" class="text-green-600 hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-left"></i> Kembali
+                            </button>
+                        </form>
+                        <a href="{{ route('perizinan.getSurat', $izin->id) }}" class="text-green-600 hover:text-green-800 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-file-lines"></i> Surat
+                        </a>
+                        @endif
+                    </td>
                     @endif
                 </tr>
                 @endforeach

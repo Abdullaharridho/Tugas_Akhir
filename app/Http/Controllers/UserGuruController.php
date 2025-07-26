@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MataPelajaran;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserGuruController extends Controller
@@ -20,6 +21,11 @@ class UserGuruController extends Controller
     // FORM CREATE
     public function create()
     {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $mapels = MataPelajaran::all();
         return view('guru.create', compact('mapels'));
     }
@@ -59,6 +65,11 @@ class UserGuruController extends Controller
     // FORM EDIT
     public function edit($id)
     {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $guru = User::where('tipeuser', 'guru')->with('mapel')->findOrFail($id);
         $mapels = MataPelajaran::all();
         return view('guru.edit', compact('guru', 'mapels'));
@@ -101,6 +112,11 @@ class UserGuruController extends Controller
 
     public function destroy($id)
     {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
+                ->withInput();
+        }
         $guru = User::where('tipeuser', 'guru')->findOrFail($id);
         $guru->delete();
 

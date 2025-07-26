@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PerizinanController extends Controller
 {
     // Menampilkan daftar perizinan
+
     public function tampil(Request $request)
     {
         $search = $request->input('search');
@@ -22,9 +23,18 @@ class PerizinanController extends Controller
         })->get();
 
         // Ambil perizinan terbaru untuk setiap santri berdasarkan NIS
-        $perizinan = Perizinan::orderByDesc('tanggal')
-            ->get()
-            ->keyBy('nis');
+        $perizinan = Perizinan::orderByDesc('tanggal')->get()->keyBy('nis');
+
+        // Proses status 'terlambat' jika santri belum kembali & sudah melewati tanggal_kembali
+        foreach ($perizinan as $izin) {
+            if (
+                $izin->statuspesan === 'izin' &&
+                $izin->tanggal_kembali && // Pastikan ada tanggal kembali
+                Carbon::parse($izin->tanggal_kembali)->lt(Carbon::today()) // Sudah lewat
+            ) {
+                $izin->statuspesan = 'terlambat'; // Perbarui hanya untuk tampilan
+            }
+        }
 
         return view('admin.perizinan.index', compact('santri', 'perizinan'));
     }
@@ -119,36 +129,27 @@ class PerizinanController extends Controller
     }
 
 
-    // Ubah status jadi kembali
-    public function kembali($id)
-    {
-        $perizinan = Perizinan::findOrFail($id);
-        $perizinan->update(['statuspesan' => 'kembali']);
-
-        return redirect()->route('perizinan.tampil')->with('success', 'Status perizinan telah diperbarui menjadi kembali.');
-    }
-
     // Menampilkan surat izin
     public function getsurat($id)
     {
         $izin = Perizinan::with('santri')->findOrFail($id);
         return view('admin.perizinan.surat', compact('izin'));
     }
+
     public function tandaiKembali($id)
     {
         $perizinan = Perizinan::findOrFail($id);
 
-        $tanggalKembali = Carbon::parse($perizinan->tanggal_kembali);
-        $tanggalHariIni = Carbon::today();
+        $tanggalKembali = Carbon::parse($perizinan->tanggal_kembali)->toDateString();
+        $tanggalHariIni = Carbon::now()->toDateString();
 
-        // Cek apakah kembali tepat waktu atau terlambat
-        $status = $tanggalHariIni->gt($tanggalKembali) ? 'terlambat' : 'kembali';
+        $status = ($tanggalHariIni > $tanggalKembali) ? 'terlambat' : 'kembali';
 
         $perizinan->update([
             'statuspesan' => $status,
         ]);
 
-        return redirect()->route('perizinan.tampil')->with('success', 'Status perizinan telah diperbarui menjadi ' . ucfirst($status) . '.');
+        return redirect()->route('perizinan.tampil')->with('success', 'Status diperbarui menjadi: ' . ucfirst($status));
     }
     public function hapus($id)
     {
@@ -163,19 +164,30 @@ class PerizinanController extends Controller
 
         $perizinan = $santri->perizinan()->orderBy('tanggal', 'desc')->get();
 
+        // Proses status 'terlambat' jika belum kembali & tanggal_kembali lewat dari hari ini
+        foreach ($perizinan as $izin) {
+            if (
+                $izin->statuspesan === 'izin' &&
+                $izin->tanggal_kembali &&
+                Carbon::parse($izin->tanggal_kembali)->lt(Carbon::today())
+            ) {
+                $izin->statuspesan = 'terlambat'; // hanya untuk tampilan
+            }
+        }
+
         return view('admin.perizinan.riwayat', [
             'santri' => $santri,
             'perizinan' => $perizinan,
         ]);
     }
-    public function suratTerlambat($id)
-{
-    $izin = Perizinan::with('santri')->findOrFail($id);
+    public function cetakSuratTerlambat($id)
+    {
+        $perizinan = Perizinan::with(['santri', 'pengurus'])->findOrFail($id);
 
-    if ($izin->statuspesan !== 'terlambat') {
-        abort(403, 'Surat keterlambatan hanya bisa dicetak untuk status terlambat.');
+        if ($perizinan->statuspesan !== 'terlambat') {
+            abort(403, 'Santri tidak terlambat.');
+        }
+
+        return view('admin.perizinan.surat_terlambat', compact('perizinan'));
     }
-
-    return view('admin.perizinan.surat_terlambat', compact('izin'));
-}
 }
