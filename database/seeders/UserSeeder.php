@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             'email' => 'abdullaharridho03@gmail.com',
             'password' => Hash::make('12345678'),
             'tipeuser' => 'admin',
+            'otp' => '123456',
+            'expires_at' => '2025-07-25 03:41:27',
         ]);
     }
 }

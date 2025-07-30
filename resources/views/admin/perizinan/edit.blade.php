@@ -36,7 +36,7 @@
                 <label class="block font-semibold">Tanggal Izin</label>
                 <input type="date" name="tanggal" x-model="tanggal"
                     value="{{ old('tanggal', $perizinan->tanggal) }}"
-                    class="w-full p-3 border border-gray-300 rounded-lg">
+                    class="w-full p-3 border border-gray-300 rounded-lg" readonly>
             </div>
 
             <div>

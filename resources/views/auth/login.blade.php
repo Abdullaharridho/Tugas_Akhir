@@ -15,6 +15,17 @@
         }
     </style>
 </head>
+@if (session('success'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-transition>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center max-w-sm w-full">
+            <h2 class="text-lg font-bold text-green-600 dark:text-green-400 mb-2">Berhasil</h2>
+            <p class="text-gray-800 dark:text-gray-200">{{ session('success') }}</p>
+            <button @click="show = false"
+                class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">Tutup</button>
+        </div>
+    </div>
+    @endif
 
 <body class="min-h-screen flex bg-gray-100" x-data="{ showError: {{ session('error') ? 'true' : 'false' }} }">
 
@@ -78,6 +89,9 @@
                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+                <a href="{{ route('password.reques') }}" class="text-blue-600 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-plus-circle"></i> Lupa Password ?
+                        </a>
 
 
 

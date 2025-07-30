@@ -153,6 +153,13 @@
                                     🗑️ Hapus
                                 </button>
                             </form>
+                            <form action="{{ route('datasantri.resetpassword', $santri->nis) }}" method="POST" onsubmit="return confirm('Yakin reset password santri ini ke NIS?')">
+                                @csrf
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white py-1 px-4 rounded-full transition">
+                                    🔁 Reset Password
+                                </button>
+                            </form>
+                            
                         </div>
                     </td>
                     <td class="px-4 py-2 text-xs text-gray-800 dark:text-gray-200">{{ $santri->nis }}</td>

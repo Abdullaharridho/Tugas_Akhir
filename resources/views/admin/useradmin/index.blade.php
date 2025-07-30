@@ -2,9 +2,9 @@
 
 @section('konten')
 
-<div class="p-6 text-gray-800 dark:text-white" 
-     x-data="userAdminModal()" 
-     x-init="
+<div class="p-6 text-gray-800 dark:text-white"
+    x-data="userAdminModal()"
+    x-init="
         @if ($errors->any() && old('_form') === 'create')
             showCreate = true;
         @elseif ($errors->any() && old('_form') === 'edit')
@@ -17,24 +17,7 @@
             updateUrl = '{{ url("user-admin") }}/{{ old('id') }}';
         @endif
      ">
-@if (session('error'))
-    <div
-        x-data="{ show: true }"
-        x-show="show"
-        x-init="setTimeout(() => show = false, 5000)"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-        x-transition>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center max-w-sm w-full">
-            <h2 class="text-lg font-bold text-red-600 dark:text-red-400 mb-2">Gagal</h2>
-            <p class="text-gray-800 dark:text-gray-200">{{ session('error') }}</p>
-            <button
-                @click="show = false"
-                class="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
-                Tutup
-            </button>
-        </div>
-    </div>
-@endif
+   
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold">Daftar Pengurus</h2>
@@ -60,15 +43,22 @@
                     <td class="px-4 py-2 border dark:border-gray-700">{{ $admin->name }}</td>
                     <td class="px-4 py-2 border dark:border-gray-700">{{ $admin->email }}</td>
                     <td class="px-4 py-2 border dark:border-gray-700 space-x-2">
-                        <button @click="openEditModal({{ $admin->id }}, '{{ $admin->name }}', '{{ $admin->email }}')" 
+                        <button @click="openEditModal({{ $admin->id }}, '{{ $admin->name }}', '{{ $admin->email }}')"
                             class="text-blue-600 hover:underline flex items-center gap-1">
                             <i class="fas fa-edit"></i> Edit
                         </button>
                         <form action="{{ route('useradmin.destroy', $admin->id) }}" method="POST" class="inline">
                             @csrf @method('DELETE')
-                            <button onclick="return confirm('Yakin hapus admin ini?')" 
-                                    class="text-red-600 hover:underline flex items-center gap-1">
+                            <button onclick="return confirm('Yakin hapus admin ini?')"
+                                class="text-red-600 hover:underline flex items-center gap-1">
                                 <i class="fas fa-trash-alt"></i> Hapus
+                            </button>
+                        </form>
+                        <form action="{{ route('useradmin.resetpassword', $admin->id) }}" method="POST" class="inline">
+                            @csrf
+                            <button onclick="return confirm('Reset password pengurus ini ?')"
+                                class="text-purple-600 hover:underline flex items-center gap-1">
+                                <i class="fas fa-key"></i> Reset Password
                             </button>
                         </form>
                     </td>
@@ -89,18 +79,18 @@
                 <div class="mb-4">
                     <label class="block font-semibold">Nama</label>
                     <input type="text" name="name" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800"
-                           value="{{ old('_form') === 'create' ? old('name') : '' }}" required>
+                        value="{{ old('_form') === 'create' ? old('name') : '' }}" required>
                     @if ($errors->has('name') && old('_form') === 'create')
-                        <span class="text-red-500 text-sm">{{ $errors->first('name') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('name') }}</span>
                     @endif
                 </div>
 
                 <div class="mb-4">
                     <label class="block font-semibold">Email</label>
                     <input type="email" name="email" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800"
-                           value="{{ old('_form') === 'create' ? old('email') : '' }}" required>
+                        value="{{ old('_form') === 'create' ? old('email') : '' }}" required>
                     @if ($errors->has('email') && old('_form') === 'create')
-                        <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
 
@@ -108,7 +98,7 @@
                     <label class="block font-semibold">Password</label>
                     <input type="password" name="password" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800" required>
                     @if ($errors->has('password') && old('_form') === 'create')
-                        <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
                     @endif
                 </div>
 
@@ -133,18 +123,18 @@
                 <div class="mb-4">
                     <label class="block font-semibold">Nama</label>
                     <input type="text" name="name" x-model="editData.name"
-                           class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800" required>
+                        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800" required>
                     @if ($errors->has('name') && old('_form') === 'edit')
-                        <span class="text-red-500 text-sm">{{ $errors->first('name') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('name') }}</span>
                     @endif
                 </div>
 
                 <div class="mb-4">
                     <label class="block font-semibold">Email</label>
                     <input type="email" name="email" x-model="editData.email"
-                           class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800" required>
+                        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800" required>
                     @if ($errors->has('email') && old('_form') === 'edit')
-                        <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
+                    <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
 
@@ -158,22 +148,26 @@
 </div>
 
 <script>
-function userAdminModal() {
-    return {
-        showCreate: false,
-        showEdit: false,
-        updateUrl: '',
-        editData: {
-            id: null,
-            name: '',
-            email: '',
-        },
-        openEditModal(id, name, email) {
-            this.editData = { id, name, email };
-            this.updateUrl = '{{ url("user-admin") }}/' + id;
-            this.showEdit = true;
-        }
-    };
-}
+    function userAdminModal() {
+        return {
+            showCreate: false,
+            showEdit: false,
+            updateUrl: '',
+            editData: {
+                id: null,
+                name: '',
+                email: '',
+            },
+            openEditModal(id, name, email) {
+                this.editData = {
+                    id,
+                    name,
+                    email
+                };
+                this.updateUrl = '{{ url("user-admin") }}/' + id;
+                this.showEdit = true;
+            }
+        };
+    }
 </script>
 @endsection

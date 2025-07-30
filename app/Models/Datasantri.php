@@ -63,7 +63,11 @@ class Datasantri extends Model
         return $this->hasMany(TransaksiTabungan::class, 'nis', 'nis');
     }
     public function perizinan()
-{
-    return $this->hasMany(Perizinan::class, 'nis', 'nis');
-}
+    {
+        return $this->hasMany(Perizinan::class, 'nis', 'nis');
+    }
+    public function akun()
+    {
+        return $this->hasOne(User::class, 'email', 'nis');
+    }
 }

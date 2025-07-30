@@ -3,7 +3,7 @@
 
 @section('konten')
 @php
-    $canEdit = Auth::user()->email === 'abdullaharridho03@gmail.com';
+$canEdit = Auth::user()->email === 'abdullaharridho03@gmail.com';
 @endphp
 
 <div class="container mx-auto p-6"
@@ -15,11 +15,11 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-semibold text-gray-800 dark:text-white">👨‍🏫 Daftar Guru</h1>
         @if ($canEdit)
-    <button @click="openCreate = true"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded-full shadow transition">
-        + Tambah Guru
-    </button>
-@endif
+        <button @click="openCreate = true"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded-full shadow transition">
+            + Tambah Guru
+        </button>
+        @endif
     </div>
 
     {{-- Tabel --}}
@@ -45,15 +45,25 @@
                         </span>
                         @endforeach
                     </td>
+                    @if($canEdit)
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
+                           
+                            <form action="{{ route('guru.resetpassword', $guru->id) }}" method="POST"
+                                onsubmit="return confirm('Yakin ingin reset password guru ini ?')">
+                                @csrf
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white py-1 px-4 rounded-full transition">
+                                    🔁 Reset Password
+                                </button>
+                            </form>
+                        
 
-                            @if ($canEdit)
+                        
                             <button @click="openEdit = '{{ $guru->id }}'"
                                 class="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-1.5 px-4 rounded-full transition">
                                 ✏️ Edit
                             </button>
-                            @endif
+                           
                             <form action="{{ route('guru.destroy', $guru->id) }}" method="POST"
                                 onsubmit="return confirm('Yakin hapus?')">
                                 @csrf @method('DELETE')
@@ -62,8 +72,10 @@
                                     🗑️ Hapus
                                 </button>
                             </form>
+                           
                         </div>
                     </td>
+                    @endif
                 </tr>
 
                 {{-- Modal Edit --}}

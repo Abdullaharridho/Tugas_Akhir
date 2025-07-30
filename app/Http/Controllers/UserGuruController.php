@@ -122,4 +122,16 @@ class UserGuruController extends Controller
 
         return redirect()->route('guru.index')->with('success', 'Guru berhasil dihapus.');
     }
+    public function resetPassword($id)
+    {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.');
+        }
+
+        $guru = User::where('tipeuser', 'guru')->findOrFail($id);
+        $guru->password = Hash::make('123456789');
+        $guru->save();
+
+        return back()->with('success', 'Password berhasil direset.');
+    }
 }

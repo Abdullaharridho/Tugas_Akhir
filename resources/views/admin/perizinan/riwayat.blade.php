@@ -21,6 +21,9 @@
             <span class="font-medium">Santri:</span> <strong>{{ $santri->nama }}</strong>
             <span class="ml-4 font-medium">NIS:</span> <strong>{{ $santri->nis }}</strong>
         </p>
+        <a href="{{ route('perizinan.tampil') }}" class="text-yellow-600 hover:underline hover:text-yellow-800 transition">
+                                <i class="fa-solid fa-backward"></i> Kembali Ke Perizinan
+                            </a>
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm border border-gray-300 divide-y divide-gray-200 bg-white shadow-sm rounded">
@@ -63,9 +66,7 @@
                             }; openModal = true">
                                 <i class="fa-solid fa-eye"></i> Detail
                             </button>
-                            <a href="{{ route('perizinan.tampil') }}" class="text-yellow-600 hover:underline hover:text-yellow-800 transition">
-                                <i class="fa-solid fa-backward"></i> Santri Kembali
-                            </a>
+                            
                             <a href="{{ route('perizinan.edit', $izin->id) }}" class="text-yellow-600 hover:underline hover:text-yellow-800 transition">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </a>
@@ -82,6 +83,9 @@
                                 <i class="fa-solid fa-file-pdf"></i> Surat Keterlambatan
                             </a>
                             @endif
+                             <a href="{{ route('perizinan.getSurat', $izin->id) }}" class="text-green-600 hover:text-green-800 hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-file-lines"></i> Surat
+                        </a>
 
                         </td>
                     </tr>

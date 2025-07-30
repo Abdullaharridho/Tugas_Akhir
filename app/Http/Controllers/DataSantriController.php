@@ -40,7 +40,7 @@ class DataSantriController extends Controller
 
     public function tambah()
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
             return back()
                 ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
                 ->withInput();
@@ -98,7 +98,7 @@ class DataSantriController extends Controller
 
     public function edit($nis)
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
             return back()
                 ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
                 ->withInput();
@@ -142,19 +142,25 @@ class DataSantriController extends Controller
 
     public function hapus($nis)
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
             return back()
                 ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
                 ->withInput();
         }
+
         $santri = Datasantri::findOrFail($nis);
+        if ($santri->akun) {
+            $santri->akun->delete();
+        }
+
+        // Hapus data santri
         $santri->delete();
 
-        return redirect()->route('datasantri.index')->with('success', 'Santri berhasil dihapus.');
+        return redirect()->route('datasantri.index')->with('success', 'Santri dan akun user berhasil dihapus.');
     }
     public function import(Request $request)
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
             return back()
                 ->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.')
                 ->withInput();
@@ -185,5 +191,23 @@ class DataSantriController extends Controller
     {
         $santri = Datasantri::where('nis', $nis)->firstOrFail();
         return view('admin.datasantri.detail', compact('santri'));
+    }
+    public function resetPassword($nis)
+    {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.');
+        }
+
+        $santri = Datasantri::findOrFail($nis);
+        $user = User::where('email', $santri->nis)->first();
+
+        if ($user) {
+            $user->password = bcrypt($santri->nis); // reset ke NIS
+            $user->save();
+
+            return back()->with('success', 'Password berhasil direset ke NIS.');
+        }
+
+        return back()->with('error', 'Akun tidak ditemukan.');
     }
 }

@@ -107,7 +107,8 @@
                             <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
                         </a>
 
-                        @if ($izin->statuspesan !== 'kembali')
+                        @if ($izin->statuspesan !== 'kembali' && $izin->statuspesan !== 'terlambat')
+
                         <form action="{{ route('perizinan.kembali', $izin->id) }}" method="POST" onsubmit="return confirm('Apakah santri sudah kembali?')">
                             @csrf
                             <button type="submit" class="text-green-600 hover:underline flex items-center gap-1">

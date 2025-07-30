@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Perizinan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PerizinanController extends Controller
 {
@@ -23,7 +24,14 @@ class PerizinanController extends Controller
         })->get();
 
         // Ambil perizinan terbaru untuk setiap santri berdasarkan NIS
-        $perizinan = Perizinan::orderByDesc('tanggal')->get()->keyBy('nis');
+        $perizinan = Perizinan::select('perizinan.*')
+            ->join(DB::raw('(SELECT nis, MAX(tanggal) as max_tanggal FROM perizinan GROUP BY nis) as latest'), function ($join) {
+                $join->on('perizinan.nis', '=', 'latest.nis')
+                    ->on('perizinan.tanggal', '=', 'latest.max_tanggal');
+            })
+            ->orderByDesc('tanggal')
+            ->get()
+            ->keyBy('nis');
 
         // Proses status 'terlambat' jika santri belum kembali & sudah melewati tanggal_kembali
         foreach ($perizinan as $izin) {

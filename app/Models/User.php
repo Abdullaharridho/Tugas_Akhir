@@ -29,6 +29,8 @@ class User extends Authenticatable
         'mapel',
         'password',
         'tipeuser',
+        'otp',
+        'expires_at',
     ];
 
     /**
@@ -63,5 +65,9 @@ class User extends Authenticatable
             return redirect('admin/dashboard');
         }
         return $next($request);
+    }
+    public function santri()
+    {
+        return $this->belongsTo(Datasantri::class, 'email', 'nis');
     }
 }

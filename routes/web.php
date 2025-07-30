@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomForgotPasswordController;
 use App\Http\Controllers\DataSantriController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\guruController;
@@ -26,6 +27,14 @@ Route::get('/', [PortalController::class, 'home'])->name('portal.home');
 Route::get('/Gallery', [PortalController::class, 'gallery'])->name('portal.gallery');
 Route::get('/Kegiatan', [PortalController::class, 'kegiatan'])->name('portal.kegiatan');
 Route::get('/login', [PortalController::class, 'login'])->name('login');
+
+Route::get('/lupapassword', [CustomForgotPasswordController::class, 'showForm'])->name('password.reques');
+Route::post('/password/send', [CustomForgotPasswordController::class, 'sendOtp'])->name('password.otp.send');
+Route::get('/verify-otp', [CustomForgotPasswordController::class, 'showVerifyForm'])->name('password.otp.verify.form');
+Route::post('/verify-otp', [CustomForgotPasswordController::class, 'verifyOtp'])->name('password.otp.verify');
+Route::get('/reset-password-form', [CustomForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset', [CustomForgotPasswordController::class, 'resetPassword'])->name('p');
+
 
 
 Route::middleware(['auth', 'guru'])->group(function () {
@@ -87,6 +96,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/data_santri/import', [DataSantriController::class, 'import'])->name('datasantri.import');
     Route::get('/data_santri/export', [DataSantriController::class, 'export'])->name('datasantri.export');
     Route::get('/data_santri/{nis}/detail', [\App\Http\Controllers\DatasantriController::class, 'detail'])->name('datasantri.detail');
+    Route::post('/data_santri/reset-password/{nis}', [DataSantriController::class, 'resetPassword'])->name('datasantri.resetpassword');
+
 
 
 
@@ -128,6 +139,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/user-admin/{id}', [UserAdminController::class, 'destroy'])->name('useradmin.destroy');
     Route::get('/ubah-password', [UserAdminController::class, 'showChangePasswordForm'])->name('useradmin.password.form');
     Route::post('/ubah-password', [UserAdminController::class, 'changePassword'])->name('useradmin.password.update');
+    Route::post('/useradmin/reset-password/{id}', [UserAdminController::class, 'resetPassword'])->name('useradmin.resetpassword');
+
 
 
     Route::get('/tabungan', [TabunganController::class, 'index'])->name('tabungan.index');
@@ -157,4 +170,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/{id}/edit', [UserGuruController::class, 'edit'])->name('guru.edit');
     Route::put('/{id}', [UserGuruController::class, 'update'])->name('guru.update');
     Route::delete('/{id}', [UserGuruController::class, 'destroy'])->name('guru.destroy');
+    Route::post('/guru/reset-password/{id}', [UserGuruController::class, 'resetPassword'])->name('guru.resetpassword');
+
+    
 });

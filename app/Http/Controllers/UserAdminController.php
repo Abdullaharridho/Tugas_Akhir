@@ -17,17 +17,18 @@ class UserAdminController extends Controller
 
     public function create()
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
-    return back()
-        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Menambah Pengurus.')
-        ->withInput();
-         }
+        
         return view('admin.useradmin.create');
     }
 
     public function store(Request $request)
     {
-       
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Menambah Pengurus.')
+                ->withInput();
+        }
+
 
         $request->validate([
             'name' => 'required',
@@ -45,7 +46,6 @@ class UserAdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-
             'password' => Hash::make($request->password),
             'tipeuser' => 'admin',
         ]);
@@ -55,11 +55,7 @@ class UserAdminController extends Controller
 
     public function edit($id)
     {
-         if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
-    return back()
-        ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Mengedit Akun')
-        ->withInput();
-         }
+        
         $admin = User::findOrFail($id);
         return view('admin.useradmin.edit', compact('admin'));
     }
@@ -67,7 +63,12 @@ class UserAdminController extends Controller
 
     public function update(Request $request, $id)
     {
-   
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()
+                ->with('error', 'Akses ditolak: Anda Tidak Memiliki Wewenang Untuk Mengedit Akun')
+                ->withInput();
+        }
+
         $admin = User::findOrFail($id);
 
         $request->validate([
@@ -139,5 +140,17 @@ class UserAdminController extends Controller
         ]);
 
         return back()->with('success', 'Password berhasil diubah.');
+    }
+    public function resetPassword($id)
+    {
+        if (Auth::user()->email !== 'abdullaharridho03@gmail.com') {
+            return back()->with('error', 'Akses ditolak: hanya pengguna tertentu yang diizinkan.');
+        }
+
+        $admin = User::where('tipeuser', 'admin')->findOrFail($id);
+        $admin->password = Hash::make('123456789');
+        $admin->save();
+
+        return back()->with('success', 'Password berhasil direset.');
     }
 }
