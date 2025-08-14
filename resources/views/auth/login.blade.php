@@ -42,7 +42,7 @@
                 <div class="flex items-center justify-center space-x-3">
                     <img src="{{ asset('storage/logo.png') }}" alt="Logo" class="h-20 w-20 object-cover">
                     <h1 class="text-xl font-semibold text-gray-700">
-                        Pondok Pesantren Miftahul Jannah
+                        Pondok Pesantren Miftahul Jannahh
                     </h1>
                 </div>
             </div>
