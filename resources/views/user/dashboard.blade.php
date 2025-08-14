@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="icon" type="image/png" href="/storage/logo1.png">
+    <link rel="icon" type="image/png" href="/storage/logo1.png">
 
     <title>User Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -68,8 +69,8 @@
     ],
     ];
     @endphp
+    <div x-data="{ openModal: false, openModalTransaksi: false, openModalIzin: false }" class="max-w-6xl mx-auto space-y-8">
 
-    <div x-data="{ openModal: false, openModalTransaksi: false }" class="max-w-6xl mx-auto space-y-8">
 
 
         @if (session('success'))
@@ -92,16 +93,50 @@
         @endif
 
         <!-- Header -->
-        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow">
+        <div x-data="{ dropdownOpen: false, openModalPassword: false, openModalTabungan: false }"
+            class="flex justify-between items-center bg-white px-6 py-4 rounded-2xl shadow-md border border-gray-100">
+
+            <!-- KIRI: Ucapan Selamat Datang -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">👋 Hai, {{ Auth::user()->name }}!</h1>
-                <p class="text-sm text-gray-500">NIS: {{ Auth::user()->email ?? '-' }}</p>
+                <h1 class="text-xl font-semibold text-gray-800">
+                    Selamat datang, <span class="text-blue-600">{{ Auth::user()->name ?? 'Pengguna' }}</span>
+                </h1>
+                <p class="text-sm text-gray-500">Semoga harimu menyenangkan 🌤️</p>
             </div>
-            <div class="text-gray-600">
-                <svg class="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5.121 17.804A13.937 13.937 0 0112 15c2.389 0 4.63.588 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+
+
+            <div class="relative">
+                <button @click="dropdownOpen = !dropdownOpen"
+                    class="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full transition-all shadow-sm focus:outline-none">
+                    <i class="fa-solid fa-user-circle text-2xl text-gray-600"></i>
+                    <span class="hidden sm:inline text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                </button>
+
+                <!-- Dropdown -->
+                <div x-show="dropdownOpen" @click.away="dropdownOpen = false" x-transition
+                    class="absolute right-0 mt-3 w-60 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50">
+                    <button @click="openModal = true; dropdownOpen = false"
+                        class="flex items-center w-full px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-key mr-3 text-blue-500"></i> Ganti Password
+                    </button>
+                    <button @click="openModalTransaksi = true; dropdownOpen = false"
+                        class="flex items-center w-full px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-wallet mr-3 text-green-500"></i> Riwayat Tabungan
+                    </button>
+                    <button @click="openModalIzin = true; dropdownOpen = false"
+                        class="flex items-center w-full px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-door-open mr-3 text-purple-500"></i> Riwayat Perizinan
+                    </button>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center w-full px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                            <i class="fa-solid fa-right-from-bracket mr-3"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -147,29 +182,48 @@
             </div>
             @endforeach
         </div>
+        <div class="bg-white rounded-xl p-5 shadow-md">
+            <h2 class="text-lg font-semibold mb-3">📋 Perizinan Terbaru</h2>
+            @if (!$perizinanTerbaru || $perizinanTerbaru->statuspesan === 'kembali')
+            <p class="text-gray-600 text-sm">Tidak ada perizinan aktif saat ini.</p>
+            @else
+            <ul class="text-sm text-gray-700 space-y-2">
+                <li><strong>Tanggal Izin:</strong> {{ \Carbon\Carbon::parse($perizinanTerbaru->tanggal)->translatedFormat('d M Y') }}</li>
+                <li><strong>Keterangan:</strong> {{ $perizinanTerbaru->keterangan }}</li>
+                <li><strong>Tanggal Kembali:</strong> {{ \Carbon\Carbon::parse($perizinanTerbaru->tanggal_kembali)->translatedFormat('d M Y') }}</li>
+                <li><strong>Status:</strong>
+                    <span class="px-2 py-1 rounded text-white text-xs {{ $perizinanTerbaru->statuspesan === 'kembali' ? 'bg-green-500' : 'bg-yellow-500' }}">
+                        {{ ucfirst($perizinanTerbaru->statuspesan) }}
+                    </span>
+                </li>
+                 <li><strong>Pengurus:</strong> {{ $perizinanTerbaru->pengurus->name ?? '-' }}</li>
+            </ul>
+            @endif
+        </div>
 
-@if($keteranganAbsensi->isNotEmpty())
-    <div class="bg-white rounded-xl shadow p-6 my-4">
-        <h2 class="text-lg font-semibold mb-3">📆 Keterangan Absensi</h2>
-        <ul class="space-y-3 text-sm text-gray-700">
-            @foreach($keteranganAbsensi as $item)
+
+        @if($keteranganAbsensi->isNotEmpty())
+        <div class="bg-white rounded-xl shadow p-6 my-4">
+            <h2 class="text-lg font-semibold mb-3">📆 Keterangan Absensi</h2>
+            <ul class="space-y-3 text-sm text-gray-700">
+                @foreach($keteranganAbsensi as $item)
                 <li class="border p-3 rounded-lg shadow-sm">
                     <p><span class="font-semibold">Tanggal:</span> {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d M Y') }}</p>
                     <p><span class="font-semibold">Keterangan:</span> {{ $item->keterangan }}</p>
                     <p><span class="font-semibold">Tindakan:</span> {{ $item->tindakan }}</p>
                 </li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <div class="bg-white rounded-xl shadow p-6 my-4">
-    <h2 class="text-lg font-semibold mb-3">📊 Grafik Tabungan Bulanan</h2>
-    <canvas id="grafikTabungan" height="100"></canvas>
-</div>
+            <h2 class="text-lg font-semibold mb-3">📊 Grafik Tabungan Bulanan</h2>
+            <canvas id="grafikTabungan" height="100"></canvas>
+        </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('grafikTabungan').getContext('2d');
     new Chart(ctx, {
@@ -199,23 +253,9 @@
                 legend: {
                     position: 'top',
                     labels: {
-                        color: '#374151', // text-gray-700
-                        font: { size: 14 }
-                    }
-                },
-            },
-            scales: {
-                x: {
-                    stacked: false,
-                    ticks: {
-                        color: '#374151'
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 5000,
-                        color: '#374151'
+                        font: {
+                            size: 14
+                        }
                     }
                 }
             }
@@ -223,17 +263,7 @@
     });
 </script>
 
-        <!-- Tombol Aksi -->
-        <div class="flex justify-center flex-wrap gap-4">
-            <button @click="openModal = true"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                🔒 Ubah Password
-            </button>
-            <button @click="openModalTransaksi = true"
-                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                💰 Riwayat Tabungan
-            </button>
-        </div>
+
 
         <!-- Modal Ubah Password -->
         <div x-show="openModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4"
@@ -304,17 +334,53 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Riwayat Perizinan -->
+        <div x-show="openModalIzin"
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4"
+            x-transition.opacity>
+            <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg relative" @click.away="openModalIzin = false">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🚪 Riwayat Perizinan</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto border text-sm text-center">
+                        <thead class="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th class="border px-3 py-2">Tanggal Izin</th>
+                                <th class="border px-3 py-2">Keterangan</th>
+                                <th class="border px-3 py-2">Tanggal Kembali</th>
+                                <th class="border px-3 py-2">Status</th>
+                                <th class="border px-3 py-2">Pengurus</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            @forelse($riwayatPerizinan as $izin)
+                            <tr class="hover:bg-gray-50">
+                                <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($izin->tanggal)->translatedFormat('d M Y') }}</td>
+                                <td class="border px-3 py-2">{{ $izin->keterangan }}</td>
+                                <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($izin->tanggal_kembali)->translatedFormat('d M Y') }}</td>
+                                <td class="border px-3 py-2">
+                                    <span class="px-2 py-1 rounded text-white text-xs {{ $izin->statuspesan === 'kembali' ? 'bg-green-500' : 'bg-yellow-500' }}">
+                                        {{ ucfirst($izin->statuspesan) }}
+                                    </span>
+                                </td>
+                                <td class="border px-3 py-2">{{ $izin->pengurus->name ?? '-' }}</td>
 
-        <!-- Tombol Logout -->
-        <div class="text-center">
-            <form method="POST" action="{{ route('logout') }}" @submit.prevent="if(confirm('Yakin ingin logout?')) $el.submit()">
-                @csrf
-                <button type="submit"
-                    class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-lg shadow">
-                    🚪 Keluar
-                </button>
-            </form>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-gray-500 py-4">Belum ada riwayat perizinan.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button @click="openModalIzin = false"
+                        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Tutup</button>
+                </div>
+            </div>
         </div>
+
+
     </div>
 </body>
 

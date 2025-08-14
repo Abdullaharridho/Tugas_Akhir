@@ -50,7 +50,7 @@ class UserAdminController extends Controller
             'tipeuser' => 'admin',
         ]);
 
-        return redirect()->route('useradmin.index')->with('success', 'Admin berhasil ditambahkan.');
+        return redirect()->route('useradmin.index')->with('success', 'Pengurus berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -110,7 +110,7 @@ class UserAdminController extends Controller
 
         $admin->delete();
 
-        return redirect()->route('useradmin.index')->with('success', 'Admin berhasil dihapus');
+        return redirect()->route('useradmin.index')->with('success', 'Pengurus berhasil dihapus');
     }
     public function showChangePasswordForm()
     {

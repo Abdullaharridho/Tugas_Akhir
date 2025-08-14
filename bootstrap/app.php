@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'user' => \App\Http\Middleware\User::class,
             'guru' => \App\Http\Middleware\Guru::class,
         ]);
+    })
+     ->withSchedule(function (Schedule $schedule) {
+        
+        $schedule->command('notifikasi:perizinan')->dailyAt('14:02');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

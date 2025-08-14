@@ -30,11 +30,12 @@ class WAObserver
     {
         $tanggalHadir = Carbon::now()->addDays(3)->format('d-m-Y');
         $datasantri = $pelanggaran->santri;
-        $nama = $pelanggaran->nama;
+        $nama = $datasantri->nama;
         $ortu = $datasantri->ortu;
         $nik = $datasantri->nik;
         $alamat = $datasantri->alamat;
-        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 1 Kali*.\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";
+        $keterangan = $pelanggaran->keterangan;
+        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 1 Kali* Dengan Melakukan Pelanggaran *$keterangan* .\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";
 
         $token = 'Y3HuLi23xamuEeb5wDmo';
 
@@ -78,13 +79,12 @@ class WAObserver
     {
         $tanggalHadir = Carbon::now()->addDays(3)->format('d-m-Y');
         $datasantri = $pelanggaran->santri;
-        $nama = $pelanggaran->nama;
+        $nama = $datasantri->nama;
         $ortu = $datasantri->ortu;
         $nik = $datasantri->nik;
         $alamat = $datasantri->alamat;
-        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 2 Kali*.\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";
-
-        $token = 'Y3HuLi23xamuEeb5wDmo';
+        $keterangan = $pelanggaran->keterangan;
+        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 2 Kali* Dengan Melakukan Pelanggaran *$keterangan* .\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";        $token = 'Y3HuLi23xamuEeb5wDmo';
 
         $kontak = $datasantri->kontak;
 
@@ -126,12 +126,12 @@ class WAObserver
     {
         $tanggalHadir = Carbon::now()->addDays(3)->format('d-m-Y');
         $datasantri = $pelanggaran->santri;
-        $nama = $pelanggaran->nama;
+        $nama = $datasantri->nama;
         $ortu = $datasantri->ortu;
         $nik = $datasantri->nik;
         $alamat = $datasantri->alamat;
-        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 3 Kali*.\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";
-
+        $keterangan = $pelanggaran->keterangan;
+        $pesan = "Assalamualaikum Wr. Wb.\n\nYth. Bapak/Ibu $ortu,\n\nKami informasikan bahwa santri atas nama *$nama* (NIK: $nik), yang berdomisili di *$alamat*, telah melebihi batas jumlah pelanggaran kategori *Berat 3 Kali* Dengan Melakukan Pelanggaran *$keterangan* .\n\nDimohon kehadiran Bapak/Ibu atau wali santri ke pondok pada tanggal *$tanggalHadir* untuk melakukan klarifikasi dan pembinaan lebih lanjut.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nWassalamualaikum Wr. Wb.";
         $token = 'Y3HuLi23xamuEeb5wDmo';
 
         $kontak = $datasantri->kontak;

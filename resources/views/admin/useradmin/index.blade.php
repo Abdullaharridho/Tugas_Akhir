@@ -23,7 +23,7 @@
         <h2 class="text-2xl font-bold">Daftar Pengurus</h2>
         <button @click="showCreate = true"
             class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded shadow">
-            <i class="fas fa-user-plus"></i> Tambah Admin
+            <i class="fas fa-user-plus"></i> Tambah Pengurus
         </button>
     </div>
 

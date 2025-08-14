@@ -28,7 +28,7 @@
                     class="w-full h-full object-cover brightness-75 transition-all duration-1000 ease-in-out" />
                 <div class="absolute inset-0 bg-emerald-900/40 flex items-center justify-center">
                     <h2 class="text-3xl md:text-5xl font-bold text-white text-center drop-shadow-lg">
-                        Selamat Datang di Pondok Pesantren
+                        ahlan Wasahlan di Pondok Pesantren
                     </h2>
                 </div>
             </div>

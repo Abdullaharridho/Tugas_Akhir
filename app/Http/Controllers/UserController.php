@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggaran;
+use App\Models\Perizinan;
 use App\Models\TransaksiTabungan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,8 +21,8 @@ class UserController extends Controller
             abort(403, 'NIS tidak ditemukan');
         }
         $keteranganAbsensi = Pelanggaran::where('nis', $nis)
-    ->where('keterangan', 'like', '%Tidak menghadiri Kelas%')
-    ->get(['keterangan', 'tindakan', 'created_at']);
+            ->where('keterangan', 'like', '%Tidak menghadiri Kelas%')
+            ->get(['keterangan', 'tindakan', 'created_at']);
         $tahun = now()->year;
         $dataGabungan = TransaksiTabungan::selectRaw("
         DATE_FORMAT(created_at, '%Y-%m') as bulan,
@@ -79,6 +80,15 @@ class UserController extends Controller
         $transaksi = TransaksiTabungan::where('nis', $nis)
             ->orderBy('tanggal', 'desc')
             ->get();
+        $perizinanTerbaru = Perizinan::with('pengurus')
+            ->where('nis', $nis)
+            ->orderByDesc('tanggal')
+            ->first();
+
+        $riwayatPerizinan = Perizinan::with('pengurus')
+            ->where('nis', $nis)
+            ->orderByDesc('tanggal')
+            ->get();
 
         return view('user.dashboard', compact(
             'pelanggaran',
@@ -88,7 +98,9 @@ class UserController extends Controller
             'keteranganSedang',
             'keteranganBerat',
             'grafikBulan',
-            'keteranganAbsensi'
+            'keteranganAbsensi',
+            'perizinanTerbaru',
+            'riwayatPerizinan',
         ));
     }
 

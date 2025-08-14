@@ -9,6 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -16,16 +19,16 @@
     </style>
 </head>
 @if (session('success'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-transition>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center max-w-sm w-full">
-            <h2 class="text-lg font-bold text-green-600 dark:text-green-400 mb-2">Berhasil</h2>
-            <p class="text-gray-800 dark:text-gray-200">{{ session('success') }}</p>
-            <button @click="show = false"
-                class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">Tutup</button>
-        </div>
+<div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-transition>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center max-w-sm w-full">
+        <h2 class="text-lg font-bold text-green-600 dark:text-green-400 mb-2">Berhasil</h2>
+        <p class="text-gray-800 dark:text-gray-200">{{ session('success') }}</p>
+        <button @click="show = false"
+            class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">Tutup</button>
     </div>
-    @endif
+</div>
+@endif
 
 <body class="min-h-screen flex bg-gray-100" x-data="{ showError: {{ session('error') ? 'true' : 'false' }} }">
 
@@ -89,10 +92,26 @@
                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                <a href="{{ route('password.reques') }}" class="text-blue-600 hover:underline flex items-center gap-1">
-                            <i class="fa-solid fa-plus-circle"></i> Lupa Password ?
-                        </a>
+                <div x-data="{ showInfo: false }" class="inline-flex items-center gap-2 text-blue-600">
+                    <!-- Link tetap seperti biasa -->
+                    <a href="{{ route('password.reques') }}" class="hover:underline inline-flex items-center gap-1">
+                        <i class="fa-solid fa-key"></i> Lupa Password
+                    </a>
 
+                    <!-- Ikon tanda tanya -->
+                    <div class="relative">
+                        <i class="fa-solid fa-circle-question text-gray-400 hover:text-gray-600 cursor-pointer"
+                            @click="showInfo = !showInfo"></i>
+
+                        <!-- Teks muncul di samping ikon -->
+                        <div x-show="showInfo"
+                            x-transition
+                            @click.away="showInfo = false"
+                            class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-white border border-gray-300 shadow px-3 py-1 text-sm text-gray-700 rounded-md z-10 whitespace-nowrap">
+                            Fitur ini hanya tersedia untuk Pengurus dan Guru.
+                        </div>
+                    </div>
+                </div>
 
 
                 <!-- Tombol Login -->

@@ -112,7 +112,7 @@
                         <form action="{{ route('perizinan.kembali', $izin->id) }}" method="POST" onsubmit="return confirm('Apakah santri sudah kembali?')">
                             @csrf
                             <button type="submit" class="text-green-600 hover:underline flex items-center gap-1">
-                                <i class="fa-solid fa-arrow-left"></i> Kembali
+                                <i class="fa-solid fa-arrow-left"></i> Sudah Kembali
                             </button>
                         </form>
                         <a href="{{ route('perizinan.getSurat', $izin->id) }}" class="text-green-600 hover:text-green-800 hover:underline flex items-center gap-1">
